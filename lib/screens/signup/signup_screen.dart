@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/helpers/validators.dart';
 import 'package:loja_virtual/models/user.dart';
+import 'package:loja_virtual/models/user_manager.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatelessWidget {
-
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -84,12 +85,27 @@ class SignUpScreen extends StatelessWidget {
                       if (formKey.currentState.validate()) {
                         formKey.currentState.save();
 
-                        if(user.password != user.confirmPassword){
-                          scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Senhas não coincidem!'),
-                          backgroundColor: Colors.red,
+                        if (user.password != user.confirmPassword) {
+                          scaffoldKey.currentState.showSnackBar(SnackBar(
+                            content: Text('Senhas não coincidem!'),
+                            backgroundColor: Colors.red,
                           ));
                           return;
                         }
+                        context.read<UserManager>().signUp(
+                              user: user,
+                              onSuccess: () {
+                                debugPrint('sucesso');
+                              },
+                              onFail: (e) {
+                                scaffoldKey.currentState.showSnackBar(
+                                  SnackBar(
+                                    content: Text('Falha ao cadastrar: $e'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              },
+                            );
                       }
                       ;
                     },
