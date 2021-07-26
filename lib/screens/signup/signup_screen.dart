@@ -95,7 +95,7 @@ class SignUpScreen extends StatelessWidget {
                         context.read<UserManager>().signUp(
                               user: user,
                               onSuccess: () {
-                                debugPrint('sucesso');
+                                Navigator.of(context).pop();
                               },
                               onFail: (e) {
                                 scaffoldKey.currentState.showSnackBar(

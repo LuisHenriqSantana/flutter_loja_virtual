@@ -96,7 +96,7 @@ class LoginScreen extends StatelessWidget {
                                         ));
                                       },
                                       onSuccess: () {
-                                        print('sucesso');
+                                        Navigator.of(context).pop();
                                       });
                                 }
                               },

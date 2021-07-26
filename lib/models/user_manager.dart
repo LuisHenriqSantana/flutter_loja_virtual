@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,11 +10,14 @@ class UserManager extends ChangeNotifier {
     _loadCurrentUser();
   }
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final Firestore fireStore = Firestore.instance;
 
-  FirebaseUser user;
+ User user;
 
   bool _loading = false;
   bool get loading => _loading;
+
+  bool get isLoggedIn => user != null;
 
   Future<void> signIn({User user, Function onFail, Function onSuccess}) async {
     loading = true;
@@ -21,7 +25,7 @@ class UserManager extends ChangeNotifier {
       final AuthResult result = await auth.signInWithEmailAndPassword(
           email: user.email, password: user.password);
 
-      this.user = result.user;
+      await _loadCurrentUser(firebaseUser: result.user);
 
       onSuccess();
     } on PlatformException catch (e) {
@@ -32,32 +36,41 @@ class UserManager extends ChangeNotifier {
 
   Future<void> signUp({User user, Function onFail, Function onSuccess}) async {
     loading = true;
-    try{
-    final AuthResult result = await auth.createUserWithEmailAndPassword(
-        email: user.email, password: user.password);
+    try {
+      final AuthResult result = await auth.createUserWithEmailAndPassword(
+          email: user.email, password: user.password);
 
-    user.id = result.user.uid;
+      user.id = result.user.uid;
+      this.user = user;
 
-    await user.saveData();
+      await user.saveData();
 
-    onSuccess();
-  } on PlatformException catch (e){
+      onSuccess();
+    } on PlatformException catch (e) {
       onFail(getErrorString(e.code));
     }
     loading = false;
-    }
+  }
+
+  void signOut(){
+    auth.signOut();
+    user = null;
+    notifyListeners();
+  }
 
   set loading(bool value) {
     _loading = value;
     notifyListeners();
   }
 
-  Future<void> _loadCurrentUser() async {
-    final FirebaseUser currentUser = await auth.currentUser();
+  Future<void> _loadCurrentUser({FirebaseUser firebaseUser}) async {
+    final FirebaseUser currentUser = firebaseUser ?? await auth.currentUser();
     if (currentUser != null) {
-      user = currentUser;
-      print(user.uid);
+      final DocumentSnapshot docUser =
+          await fireStore.collection('users').document(currentUser.uid).get();
+     user = User.fromDocument(docUser);
+     print(user.name);
+      notifyListeners();
     }
-    notifyListeners();
   }
 }
