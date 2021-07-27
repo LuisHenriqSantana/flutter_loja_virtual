@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/base/base_screen.dart';
@@ -6,18 +5,27 @@ import 'package:loja_virtual/screens/login/login_screen.dart';
 import 'package:loja_virtual/screens/signup/signup_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'models/product_manager.dart';
+
 void main() {
   runApp(MyApp());
 
-  Firestore.instance.collection('teste').add({'teste': 'teste'});
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => UserManager(),
-      lazy: false,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserManager(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProductManager(),
+          lazy: false,
+        )
+       ],
       child: MaterialApp(
         title: 'Loja do Luis',
         debugShowCheckedModeBanner: false,
@@ -40,7 +48,8 @@ class MyApp extends StatelessWidget {
               );
             case "/base":
             default:
-              return MaterialPageRoute(builder: (_) => BaseScreen(),
+              return MaterialPageRoute(
+                builder: (_) => BaseScreen(),
               );
           }
         },

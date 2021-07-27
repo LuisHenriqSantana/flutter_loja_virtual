@@ -69,7 +69,6 @@ class UserManager extends ChangeNotifier {
       final DocumentSnapshot docUser =
           await fireStore.collection('users').document(currentUser.uid).get();
      user = User.fromDocument(docUser);
-     print(user.name);
       notifyListeners();
     }
   }

@@ -17,21 +17,21 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text('Entrar'),
+        title: const Text('Entrar'),
         centerTitle: true,
         actions: <Widget>[
           FlatButton(onPressed: (){
             Navigator.of(context).pushReplacementNamed('/signup');
           },
             textColor: Colors.white,
-              child: Text('Criar Conta',
+              child: const Text('Criar Conta',
               style: TextStyle(fontSize: 14),
               ),)
         ],
       ),
       body: Center(
         child: Card(
-          margin: EdgeInsets.symmetric(horizontal: 16),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(
@@ -43,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                     TextFormField(
                       controller: emailController,
                       enabled: !userManager.loading,
-                      decoration: InputDecoration(hintText: 'E-mail'),
+                      decoration: const InputDecoration(hintText: 'E-mail'),
                       keyboardType: TextInputType.emailAddress,
                       autocorrect: false,
                       validator: (email) {
@@ -51,18 +51,19 @@ class LoginScreen extends StatelessWidget {
                         return null;
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     TextFormField(
                       controller: passController,
                       enabled: !userManager.loading,
-                      decoration: InputDecoration(hintText: 'Senha'),
+                      decoration: const InputDecoration(hintText: 'Senha'),
                       autocorrect: false,
                       obscureText: true,
                       validator: (pass) {
-                        if (pass.isEmpty || pass.length < 6)
+                        if (pass.isEmpty || pass.length < 6) {
                           return 'Senha inválida';
+                        }
                         return null;
                       },
                     ),
@@ -71,10 +72,10 @@ class LoginScreen extends StatelessWidget {
                       child: FlatButton(
                         onPressed: () {},
                         padding: EdgeInsets.zero,
-                        child: Text('Esqueci minha senha'),
+                        child: const Text('Esqueci minha senha'),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     SizedBox(
@@ -105,11 +106,11 @@ class LoginScreen extends StatelessWidget {
                             Theme.of(context).primaryColor.withAlpha(100),
                         textColor: Colors.white,
                         child: userManager.loading
-                            ? CircularProgressIndicator(
+                            ? const CircularProgressIndicator(
                                 valueColor:
                                     AlwaysStoppedAnimation(Colors.white),
                               )
-                            : Text(
+                            : const Text(
                                 'Entrar',
                                 style: TextStyle(fontSize: 18),
                               ),
