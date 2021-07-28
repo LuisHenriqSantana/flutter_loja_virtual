@@ -27,6 +27,7 @@ class ProductsScreen extends StatelessWidget {
                         productManager.search = search;
                       }
                     },
+                    // ignore: sized_box_for_whitespace
                     child: Container(
                         width: constraints.biggest.width,
                         child: Text(
