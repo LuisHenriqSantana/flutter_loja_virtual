@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'item_size.dart';
 
-class Product extends ChangeNotifier{
+class Product extends ChangeNotifier {
   Product.fromDocument(DocumentSnapshot document) {
     id = document.documentID;
 
@@ -26,14 +26,14 @@ class Product extends ChangeNotifier{
   ItemSize _selectedSize;
   ItemSize get selectedSize => _selectedSize;
 
-  set selectedSize(ItemSize value){
+  set selectedSize(ItemSize value) {
     _selectedSize = value;
     notifyListeners();
   }
 
   int get totalStock {
     int stock = 0;
-    for(final size in sizes){
+    for (final size in sizes) {
       stock += size.stock;
     }
     return stock;
@@ -41,5 +41,13 @@ class Product extends ChangeNotifier{
 
   bool get hasStock {
     return totalStock > 0;
+  }
+
+  ItemSize findSize(String name) {
+    try {
+      return sizes.firstWhere((s) => s.name == name);
+    } catch (e) {
+      return null;
+    }
   }
 }
